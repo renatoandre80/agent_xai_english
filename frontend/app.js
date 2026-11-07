@@ -2,7 +2,7 @@
 
 import { AdkClient } from "./api.js";
 import { renderMarkdown } from "./markdown.js";
-import { createRecognizer, speak, sttSupported } from "./speech.js";
+import { createRecognizer, speak, stopSpeaking, sttSupported } from "./speech.js";
 import { displayForUserText, h, WidgetFactory } from "./widgets.js";
 
 const APP_NAME = "english_tutor";
@@ -49,6 +49,7 @@ const state = {
   userId: storage.get(STORAGE.user) || `aluno_${crypto.randomUUID().slice(0, 8)}`,
   sessionId: null,
   busy: false,
+  controller: null,
   coach: "english_teacher",
   xp: 0,
 };
@@ -295,11 +296,16 @@ function sendMessage(text, display = text) {
 }
 
 async function run(text, retried = false) {
+  const controller = new AbortController();
+  state.controller = controller;
   setBusy(true);
   const handle = makeEventHandler({ live: true });
   try {
-    for await (const event of api.run({ userId: state.userId, sessionId: state.sessionId, text })) handle(event);
+    for await (const event of api.run({ userId: state.userId, sessionId: state.sessionId, text, signal: controller.signal })) {
+      handle(event);
+    }
   } catch (err) {
+    if (controller.signal.aborted) return; // cancelado por "Nova conversa"
     if (err.code === 404 && !retried) {
       await ensureSession({ fresh: true });
       return run(text, true);
@@ -309,9 +315,36 @@ async function run(text, retried = false) {
     toast(quota ? "⏳ Limite de uso da IA atingido. Aguarde ~1 minuto." : `⚠️ ${err.message || "Erro de conexão"}`, "err");
     addSystemChip(quota ? "A professora precisa de uma pausa rápida (limite da API). Tente de novo em instantes." : "Algo deu errado. Tente enviar de novo.");
   } finally {
-    setBusy(false);
-    refreshProgress();
-    els.input.focus({ preventScroll: true });
+    // Uma execução cancelada não pode mexer no estado da conversa nova.
+    if (state.controller === controller) {
+      state.controller = null;
+      setBusy(false);
+      refreshProgress();
+      els.input.focus({ preventScroll: true });
+    }
+  }
+}
+
+async function newConversation() {
+  state.controller?.abort();
+  state.controller = null;
+  stopSpeaking();
+  setBusy(false);
+  els.messages.replaceChildren();
+  widgets.reset();
+  els.welcome.hidden = false;
+  els.input.value = "";
+  autoGrow();
+  state.coach = null;
+  setCoach("english_teacher");
+  closeSidebar();
+  try {
+    await ensureSession({ fresh: true });
+    await refreshProgress();
+    toast("✨ Nova conversa iniciada. Seu progresso foi mantido!");
+  } catch (err) {
+    console.error(err);
+    toast("⚠️ Não foi possível criar a nova conversa. O servidor está rodando?", "err");
   }
 }
 
@@ -353,17 +386,7 @@ function wire() {
     }
   });
 
-  $("#newChatBtn").addEventListener("click", async () => {
-    if (state.busy) return;
-    els.messages.replaceChildren();
-    els.welcome.hidden = false;
-    state.coach = null;
-    setCoach("english_teacher");
-    await ensureSession({ fresh: true });
-    await refreshProgress();
-    closeSidebar();
-    toast("✨ Nova conversa iniciada — seu progresso foi mantido!");
-  });
+  $("#newChatBtn").addEventListener("click", newConversation);
 
   $("#themeBtn").addEventListener("click", () => {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";

@@ -68,6 +68,11 @@ export class WidgetFactory {
     return card.el;
   }
 
+  /** Esquece os cartões da conversa anterior. */
+  reset() {
+    this.cards.clear();
+  }
+
   applyResult(result) {
     this.cards.get(result.exercise_id)?.applyResult?.(result);
   }

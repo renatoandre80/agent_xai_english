@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 
 import uvicorn
+from fastapi import Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from google.adk.cli.fast_api import get_fast_api_app
@@ -21,7 +22,8 @@ DATA_DIR.mkdir(exist_ok=True)
 HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", "8000"))
 
-# Sessões em SQLite: o progresso do aluno (estado "user:") sobrevive a reinícios.
+# Sessões em SQLite: o progresso do aluno (estado "user:")
+# sobrevive a reinícios do servidor.
 SESSION_DB = f"sqlite:///{(DATA_DIR / 'sessions.db').as_posix()}"
 
 app = get_fast_api_app(
@@ -32,6 +34,18 @@ app = get_fast_api_app(
 )
 
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
+
+@app.middleware("http")
+async def revalidate_frontend(request: Request, call_next):
+    """Faz o navegador revalidar a interface a cada carga.
+
+    Evita que JS/CSS antigos continuem em cache após uma atualização.
+    """
+    response = await call_next(request)
+    if request.url.path == "/" or request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
 
 
 @app.get("/", include_in_schema=False)
