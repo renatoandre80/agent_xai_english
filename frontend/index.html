@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>EnglishUp · Seu professor de inglês com IA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+</head>
+<body>
+  <div class="app">
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar" id="sidebar" aria-label="Progresso e módulos">
+      <div class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <div class="brand-name">English<span>Up</span></div>
+          <div class="brand-tag">Aprenda inglês com IA</div>
+        </div>
+      </div>
+
+      <section class="card level-card" aria-label="Seu nível">
+        <div class="level-top">
+          <div>
+            <div class="eyebrow">Seu nível</div>
+            <div class="level-name" id="levelName">A1 - Iniciante</div>
+          </div>
+          <div class="streak" title="Dias seguidos estudando">
+            <span class="flame">🔥</span><span id="streak">0</span>
+          </div>
+        </div>
+        <div class="xp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="xpBarWrap">
+          <div class="xp-fill" id="xpFill"></div>
+        </div>
+        <div class="xp-text"><strong id="xp">0</strong> XP <span id="xpNext"></span></div>
+      </section>
+
+      <nav class="modules" aria-label="Módulos de estudo">
+        <div class="eyebrow">Praticar</div>
+        <button class="module" data-skill="listening" data-prompt="Quero praticar Listening">
+          <span class="m-ico">🎧</span><span class="m-body"><span class="m-title">Listening</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+        <button class="module" data-skill="speaking" data-prompt="Quero praticar Speaking (pronúncia)">
+          <span class="m-ico">🎤</span><span class="m-body"><span class="m-title">Speaking</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+        <button class="module" data-skill="reading" data-prompt="Quero praticar Reading">
+          <span class="m-ico">📖</span><span class="m-body"><span class="m-title">Reading</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+        <button class="module" data-skill="writing" data-prompt="Quero praticar Writing">
+          <span class="m-ico">✍️</span><span class="m-body"><span class="m-title">Writing</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+        <button class="module" data-skill="vocabulary" data-prompt="Quero aprender vocabulário novo com flashcards">
+          <span class="m-ico">🃏</span><span class="m-body"><span class="m-title">Vocabulário</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+        <button class="module" data-skill="grammar" data-prompt="Quero praticar gramática">
+          <span class="m-ico">🧩</span><span class="m-body"><span class="m-title">Gramática</span><span class="m-bar"><i></i></span></span><span class="m-pct">–</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="ghost-btn" id="progressBtn" data-prompt="Como está meu progresso? O que devo estudar agora?">📊 Meu progresso</button>
+        <button class="ghost-btn" id="newChatBtn">✨ Nova conversa</button>
+        <button class="ghost-btn" id="themeBtn" aria-label="Alternar tema">🌓 Tema</button>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <div class="coach" id="coach">
+          <div class="coach-avatar" id="coachAvatar">👩‍🏫</div>
+          <div>
+            <div class="coach-name" id="coachName">Teacher Ana</div>
+            <div class="coach-role" id="coachRole"><span class="dot"></span>Professora coordenadora</div>
+          </div>
+        </div>
+        <div class="topbar-xp" id="topXp" title="XP total">⭐ <span>0</span></div>
+      </header>
+
+      <section class="chat" id="chat" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-hero">
+            <div class="hero-emoji">👋</div>
+            <h1>Hello! Vamos aprender inglês?</h1>
+            <p>Sou a <strong>Teacher Ana</strong> e trabalho com uma equipe de coaches para treinar as
+              4 habilidades do inglês com exercícios interativos, áudio e microfone.</p>
+          </div>
+          <div class="skill-grid">
+            <button class="skill-card" style="--c: var(--listening)" data-prompt="Quero praticar Listening">
+              <span class="sc-ico">🎧</span><span class="sc-title">Listening</span><span class="sc-desc">Ouça áudios com voz nativa</span>
+            </button>
+            <button class="skill-card" style="--c: var(--speaking)" data-prompt="Quero praticar Speaking (pronúncia)">
+              <span class="sc-ico">🎤</span><span class="sc-title">Speaking</span><span class="sc-desc">Fale e receba nota de pronúncia</span>
+            </button>
+            <button class="skill-card" style="--c: var(--reading)" data-prompt="Quero praticar Reading">
+              <span class="sc-ico">📖</span><span class="sc-title">Reading</span><span class="sc-desc">Textos curtos e interpretação</span>
+            </button>
+            <button class="skill-card" style="--c: var(--writing)" data-prompt="Quero praticar Writing">
+              <span class="sc-ico">✍️</span><span class="sc-title">Writing</span><span class="sc-desc">Escreva e receba correção</span>
+            </button>
+            <button class="skill-card" style="--c: var(--vocabulary)" data-prompt="Quero aprender vocabulário novo com flashcards">
+              <span class="sc-ico">🃏</span><span class="sc-title">Vocabulário</span><span class="sc-desc">Flashcards com áudio</span>
+            </button>
+            <button class="skill-card" style="--c: var(--grammar)" data-prompt="Quero praticar gramática">
+              <span class="sc-ico">🧩</span><span class="sc-title">Gramática</span><span class="sc-desc">Regras simples na prática</span>
+            </button>
+          </div>
+          <div class="starter-chips">
+            <button class="chip" data-prompt="Olá! Sou novo por aqui. Pode me conhecer e montar um plano de estudos?">🚀 Começar do zero</button>
+            <button class="chip" data-prompt="Como eu me apresento em inglês?">🙋 Como me apresentar?</button>
+            <button class="chip" data-prompt="Qual a diferença entre 'a' e 'an'?">🤔 'a' ou 'an'?</button>
+            <button class="chip" data-prompt="Me ensine frases úteis para uma viagem">✈️ Inglês para viagem</button>
+          </div>
+        </div>
+        <div class="messages" id="messages"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <form class="composer" id="composer" autocomplete="off">
+          <button type="button" class="icon-btn mic" id="dictateBtn" aria-label="Ditar mensagem" title="Ditar mensagem">🎙️</button>
+          <textarea id="input" rows="1" placeholder="Escreva sua mensagem…" aria-label="Mensagem"></textarea>
+          <button type="submit" class="send-btn" id="sendBtn" aria-label="Enviar">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6 3.39 10.1 15 12 3.39 13.9z"/></svg>
+          </button>
+        </form>
+        <div class="composer-hint">Enter envia · Shift+Enter quebra linha · clique nas palavras em <strong>negrito</strong> para ouvir a pronúncia</div>
+      </footer>
+    </main>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="assertive"></div>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

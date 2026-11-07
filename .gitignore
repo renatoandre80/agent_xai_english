@@ -1,0 +1,21 @@
+# Segredos
+.env
+**/.env
+# claude.md contém a chave de API em texto puro
+claude.md
+CLAUDE.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Dados locais
+data/*.db
+.adk/
+
+# IDE
+.vscode/
+.idea/
