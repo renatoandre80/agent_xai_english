@@ -12,7 +12,7 @@ Um sistema **multiagente** feito com o [Google Agent Development Kit (ADK)](http
 | ✍️ Writing | Coach Zoe | Tarefas de escrita com contador de palavras e correção detalhada (❌ → ✅) com nota |
 | 🃏🧩 Vocabulário e gramática | Coach Max | Flashcards que viram, com áudio, e exercícios de lacuna e múltipla escolha |
 
-- **Teacher Ana** (agente coordenador) conhece o aluno, salva o perfil, acompanha o progresso e transfere para o especialista certo.
+- **Teacher Bruna** (agente coordenador) conhece o aluno, salva o perfil, acompanha o progresso e transfere para o especialista certo.
 - **Gamificação**: XP, nível aproximado (A1 → B1), sequência de dias e taxa de acerto por habilidade.
 - **Progresso persistente** em SQLite, com estado `user:` do ADK que é compartilhado entre conversas.
 - O **gabarito nunca vai para o navegador**: as respostas são guardadas no estado da sessão e corrigidas pelas ferramentas no servidor.

@@ -9,7 +9,7 @@ const APP_NAME = "english_tutor";
 const STORAGE = { user: "englishup.userId", session: "englishup.sessionId", theme: "englishup.theme" };
 
 const COACHES = {
-  english_teacher: { name: "Teacher Ana", emoji: "👩‍🏫", role: "Professora coordenadora", color: "var(--primary)", skill: null },
+  english_teacher: { name: "Teacher Bruna", emoji: "👩‍🏫", role: "Professora coordenadora", color: "var(--primary)", skill: null },
   listening_coach: { name: "Coach Leo", emoji: "🎧", role: "Especialista em Listening", color: "var(--listening)", skill: "listening" },
   speaking_coach: { name: "Coach Mia", emoji: "🎤", role: "Especialista em Speaking", color: "var(--speaking)", skill: "speaking" },
   reading_coach: { name: "Coach Theo", emoji: "📖", role: "Especialista em Reading", color: "var(--reading)", skill: "reading" },
