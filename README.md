@@ -46,11 +46,25 @@ Os cartões interativos funcionam assim: as ferramentas `create_*` devolvem um p
 
 ## 🚀 Como rodar
 
+O jeito mais fácil é usar o script de instalação. Ele cria a `.venv`, instala as dependências e gera o `.env`:
+
 ```bash
-pip install -r requirements.txt
-cp .env.example .env        # coloque sua GOOGLE_API_KEY
-python server.py            # abra http://localhost:8000
+bash scripts/setup.sh                                   # Git Bash / Linux / macOS
+powershell -ExecutionPolicy Bypass -File scripts/setup.ps1   # PowerShell
 ```
+
+Depois, inicie o servidor e abra http://localhost:8000:
+
+```bash
+.venv/Scripts/python.exe server.py      # Windows (Git Bash)
+.venv/bin/python server.py              # Linux/macOS
+```
+
+> **Caminhos com espaço (ex.: `Área de Trabalho`)**: no Git Bash, use `/c/...` (e não `/c:/...`) e coloque o caminho entre aspas:
+> `"/c/Users/<você>/OneDrive/Área de Trabalho/estudos/agent_ia_english/.venv/Scripts/python.exe" -m pip install -r requirements.txt`
+> Rodando de dentro da pasta do projeto, basta `.venv/Scripts/python.exe -m pip install -r requirements.txt`.
+
+> **Atualizou do ADK 1.x para o 2.x?** O ADK 2 usa outro formato de banco de sessões. Renomeie ou apague `data/sessions.db` (as sessões antigas e o progresso de teste se perdem) ou siga o comando de migração mostrado no erro.
 
 > Use **Google Chrome** ou **Microsoft Edge** para ter o reconhecimento de voz (Speaking).
 

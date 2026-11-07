@@ -1,4 +1,4 @@
-google-adk>=1.13.0
+google-adk>=1.13.0,<3
 python-dotenv>=1.0
 sqlalchemy>=2.0
 uvicorn>=0.30

@@ -63,7 +63,10 @@ export class AdkClient {
           .join("\n");
         if (!data) continue;
         const event = JSON.parse(data);
-        if (event.error) throw new Error(event.error);
+        // ADK 1.x envia {error}; o ADK 2.x envia antes um evento com errorCode/errorMessage.
+        if (event.error || event.errorCode) {
+          throw new Error(event.error || `${event.errorCode}: ${event.errorMessage || ""}`);
+        }
         yield event;
       }
     }
